@@ -8,8 +8,9 @@ class ProgressEngine {
     this.store = window.LifeRPGStore;
     this.misc = window.LifeRPGMisc;
     this.tooltip = document.getElementById('chart-tooltip-element');
-    this.activeRange = 7; // Default 7 days
+    this.activeRange = 30; // Default 30 days (monthly view)
     this.showAllDiagnostics = false;
+    this.activeFilterAttr = null; // Attribute filter (null = show all)
   }
 
   init() {
@@ -238,10 +239,26 @@ class ProgressEngine {
     const rawData = [];
 
     // 1. Gather all raw daily data for the filter range
+    const filterHabits = this.activeFilterAttr
+      ? state.habits.filter(h => h.category === this.activeFilterAttr)
+      : null;
+
     for (let i = this.activeRange - 1; i >= 0; i--) {
       const dateStr = this.getDateStringOffset(i);
-      const dayData = state.history[dateStr] || { count: 0, xp: 0 };
-      rawData.push({ dateStr, xp: dayData.xp });
+      let xpForDay = 0;
+
+      if (filterHabits) {
+        // Sum XP only from selected attribute's habits
+        filterHabits.forEach(h => {
+          const completedOnDay = h.history ? h.history.filter(d => d === dateStr).length : 0;
+          xpForDay += completedOnDay * this.store.getXpReward(h.difficulty);
+        });
+      } else {
+        const dayData = state.history[dateStr] || { xp: 0 };
+        xpForDay = dayData.xp;
+      }
+
+      rawData.push({ dateStr, xp: xpForDay });
     }
 
     // 2. Group data if range is large to prevent crowding
@@ -253,7 +270,7 @@ class ProgressEngine {
         const sumXP = slice.reduce((sum, d) => sum + d.xp, 0);
         chartData.push({ label: `W${w+1}`, xp: sumXP });
       }
-      document.getElementById('growth-chart-title').textContent = 'GP Gains (Weekly View - Last 90 Days)';
+      document.getElementById('growth-chart-title').textContent = `GP Gains (Weekly View - Last 90 Days)${this.activeFilterAttr ? ' — ' + this.activeFilterAttr : ''}`;
     } else if (this.activeRange === 365) {
       // Group into 12 months
       const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -270,7 +287,7 @@ class ProgressEngine {
         const mIndex = (currentMonth - i + 12) % 12;
         chartData.push({ label: months[mIndex], xp: monthlySums[mIndex] });
       }
-      document.getElementById('growth-chart-title').textContent = 'GP Gains (Monthly View - Last Year)';
+      document.getElementById('growth-chart-title').textContent = `GP Gains (Monthly View - Last Year)${this.activeFilterAttr ? ' — ' + this.activeFilterAttr : ''}`;
     } else {
       // 7D or 30D (Daily points)
       rawData.forEach(d => {
@@ -279,7 +296,7 @@ class ProgressEngine {
           : new Date(d.dateStr).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
         chartData.push({ label, xp: d.xp });
       });
-      document.getElementById('growth-chart-title').textContent = `GP Gains (Last ${this.activeRange} Days)`;
+      document.getElementById('growth-chart-title').textContent = `GP Gains (Last ${this.activeRange} Days)${this.activeFilterAttr ? ' — ' + this.activeFilterAttr : ''}`;
     }
 
     const width = container.clientWidth || 360;
@@ -427,6 +444,10 @@ class ProgressEngine {
     const rawData = [];
 
     // Gather Daily data
+    const filterAttrs = this.activeFilterAttr
+      ? state.habits.filter(h => h.category === this.activeFilterAttr)
+      : null;
+
     for (let i = this.activeRange - 1; i >= 0; i--) {
       const dateStr = this.getDateStringOffset(i);
       const dayData = state.history[dateStr] || { count: 0, xp: 0 };
@@ -435,7 +456,8 @@ class ProgressEngine {
       let habitCompletions = 0;
       let taskCompletions = 0;
 
-      state.habits.forEach(h => {
+      const habitsToCheck = filterAttrs || state.habits;
+      habitsToCheck.forEach(h => {
         if (h.history && h.history.includes(dateStr)) {
           if ((h.frequency || '').toLowerCase() === 'one-time') {
             taskCompletions++;
@@ -446,11 +468,11 @@ class ProgressEngine {
       });
 
       // Fallback if no specific habit histories were logged, distribute counts
-      if (habitCompletions === 0 && taskCompletions === 0 && dayData.count > 0) {
+      if (!filterAttrs && habitCompletions === 0 && taskCompletions === 0 && dayData.count > 0) {
         habitCompletions = dayData.count;
       }
 
-      rawData.push({ dateStr, habits: habitCompletions, tasks: taskCompletions, count: dayData.count });
+      rawData.push({ dateStr, habits: habitCompletions, tasks: taskCompletions, count: habitCompletions + taskCompletions });
     }
 
     // Grouping
@@ -704,36 +726,83 @@ class ProgressEngine {
       container.appendChild(itemEl);
     });
 
-    // If "View All" is toggled, append general performance per focus area
-    if (this.showAllDiagnostics) {
-      const spacer = document.createElement('div');
-      spacer.style.borderTop = '1px dashed var(--border-color)';
-      spacer.style.margin = '8px 0';
-      container.appendChild(spacer);
+    // Always render All Attributes breakdown (compact rows under top 3)
+    const sectionLabel = document.createElement('div');
+    sectionLabel.style.fontSize = '0.65rem';
+    sectionLabel.style.fontWeight = '700';
+    sectionLabel.style.textTransform = 'uppercase';
+    sectionLabel.style.color = 'var(--text-muted)';
+    sectionLabel.style.letterSpacing = '0.05em';
+    sectionLabel.style.marginTop = '4px';
+    sectionLabel.textContent = '── Focus Area Breakdown ──';
+    container.appendChild(sectionLabel);
 
-      attributesList.forEach(a => {
-        const itemEl = document.createElement('div');
-        itemEl.style.display = 'flex';
-        itemEl.style.justifyContent = 'space-between';
-        itemEl.style.alignItems = 'center';
-        itemEl.style.background = 'rgba(255,255,255,0.01)';
-        itemEl.style.padding = '8px 12px';
-        itemEl.style.borderRadius = '8px';
-        itemEl.style.border = '1px solid var(--border-color)';
-        itemEl.style.borderLeft = `3px solid ${a.color}`;
+    // Get names already shown in top-3 cards (they get a ★ star in bottom list)
+    const highlightNames = new Set([topGrowing, topConsistent, needsAttention]);
 
-        itemEl.innerHTML = `
-          <div>
-            <strong style="color: var(--text-primary); font-size: 0.85rem;">${a.name}</strong>
-            <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">Completions: ${a.completedCount} • Misses: ${a.missedCount}</span>
-          </div>
-          <div style="text-align: right;">
-            <strong style="color: ${a.color}; font-size: 0.85rem;">+${a.gpGained} GP</strong>
-            <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600;">CR: ${a.completionRate}%</span>
-          </div>
-        `;
-        container.appendChild(itemEl);
+    // Show all attributes in the detailed breakdown
+    const listToShow = attributesList;
+
+    listToShow.forEach(a => {
+      const isHighlighted = highlightNames.has(a.name);
+      const itemEl = document.createElement('div');
+      itemEl.style.display = 'flex';
+      itemEl.style.justifyContent = 'space-between';
+      itemEl.style.alignItems = 'center';
+      itemEl.style.background = this.activeFilterAttr === a.name ? `${a.color}15` : 'rgba(255,255,255,0.01)';
+      itemEl.style.padding = '8px 12px';
+      itemEl.style.borderRadius = '8px';
+      itemEl.style.border = `1px solid ${this.activeFilterAttr === a.name ? a.color : 'var(--border-color)'}`;
+      itemEl.style.borderLeft = `3px solid ${a.color}`;
+      itemEl.style.cursor = 'pointer';
+      itemEl.style.transition = 'all 0.2s';
+      itemEl.title = `Click to highlight ${a.name} data`;
+
+      itemEl.innerHTML = `
+        <div>
+          <strong style="color: ${this.activeFilterAttr === a.name ? a.color : 'var(--text-primary)'}; font-size: 0.85rem;">${a.name}${isHighlighted ? ' ★' : ''}</strong>
+          <span style="display: block; font-size: 0.7rem; color: var(--text-muted);">✅ ${a.completedCount} completed • ❌ ${a.missedCount} missed</span>
+        </div>
+        <div style="text-align: right;">
+          <strong style="color: ${a.color}; font-size: 0.85rem;">+${a.gpGained} GP</strong>
+          <span style="display: block; font-size: 0.7rem; color: var(--text-secondary); font-weight: 600;">CR: ${a.completionRate}%</span>
+        </div>
+      `;
+
+      // Click to filter chart by this attribute
+      itemEl.addEventListener('click', () => {
+        if (this.activeFilterAttr === a.name) {
+          this.activeFilterAttr = null; // deselect
+        } else {
+          this.activeFilterAttr = a.name;
+        }
+        this.renderAll();
       });
+
+      container.appendChild(itemEl);
+    });
+
+    // Update filter indicator title
+    const diagCard = document.getElementById('diagnostics-card');
+    const filterBadge = diagCard ? diagCard.querySelector('.attr-filter-badge') : null;
+    if (diagCard) {
+      let badge = diagCard.querySelector('.attr-filter-badge');
+      if (this.activeFilterAttr) {
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'attr-filter-badge';
+          badge.style.cssText = 'font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; background: rgba(99,102,241,0.15); color: var(--color-primary); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; margin-left: 8px;';
+          const header = diagCard.querySelector('.chart-header');
+          if (header) header.appendChild(badge);
+        }
+        const filterAttrColor = attrMetrics[this.activeFilterAttr]?.color || 'var(--color-primary)';
+        badge.style.background = `${filterAttrColor}20`;
+        badge.style.color = filterAttrColor;
+        badge.innerHTML = `🔍 ${this.activeFilterAttr} <span style="font-size: 0.6rem; opacity: 0.7;">✕ Clear</span>`;
+        badge.onclick = () => { this.activeFilterAttr = null; this.renderAll(); };
+      } else if (badge) {
+        badge.remove();
+      }
     }
   }
 

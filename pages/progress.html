@@ -27,8 +27,8 @@
                 </div>
                 <!-- Time Range Filter Tabs -->
                 <div style="display: flex; gap: 0.5rem;" class="filter-tabs">
-                    <button class="btn btn-secondary filter-tab-btn active" data-range="7" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">7D</button>
-                    <button class="btn btn-secondary filter-tab-btn" data-range="30" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">30D</button>
+                    <button class="btn btn-secondary filter-tab-btn" data-range="7" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">7D</button>
+                    <button class="btn btn-secondary filter-tab-btn active" data-range="30" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">30D</button>
                     <button class="btn btn-secondary filter-tab-btn" data-range="90" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">90D</button>
                     <button class="btn btn-secondary filter-tab-btn" data-range="365" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">1Y</button>
                 </div>
@@ -104,11 +104,10 @@
                     </div>
                 </div>
 
-                <!-- 4. Attribute Diagnostics -->
                 <div class="card chart-card" id="diagnostics-card">
                     <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <h3 class="chart-title">Attribute Analysis</h3>
-                        <button class="btn btn-secondary" id="btn-toggle-diagnostics" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; display: none;">View All</button>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">Click an attribute to filter charts</span>
                     </div>
                     <div id="diagnostics-container" style="display: flex; flex-direction: column; gap: 12px; margin-top: 1rem;">
                         <!-- Dynamic diagnostic list injected here -->

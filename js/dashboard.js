@@ -305,34 +305,38 @@ class DashboardEngine {
   }
 
   completeQuestAndNotify(habitId) {
-    const xpReward = this.store.getXpReward(this.store.state.habits.find(h => h.id === habitId).difficulty);
+    const habit = this.store.state.habits.find(h => h.id === habitId);
+    if (!habit) return;
+    const xpReward = this.store.getXpReward(habit.difficulty);
+
+    // Capture button position BEFORE render (render removes the button from DOM)
+    const btnElem = document.querySelector(`[data-id="${habitId}"]`);
+    
     const result = this.store.completeHabit(habitId);
     if (!result) return;
+
+    // Immediately re-render so other habits remain clickable right away
+    this.render();
 
     this.misc.playRewardChime();
     this.misc.triggerConfetti();
 
-    // Spawn floating GP indicator
-    const btnElem = document.querySelector(`[data-id="${habitId}"]`);
+    // Spawn floating GP indicator using pre-captured element
     if (btnElem) {
       this.misc.spawnFloatingXP(btnElem, xpReward);
     }
 
-    setTimeout(() => {
-      if (result.playerLeveledUp) {
-        this.misc.triggerLevelUp(result.newLevel);
-      } else {
-        this.showUndoToast(habitId, `Gained +${xpReward} GP in ${result.attrName}!`);
-      }
-      
-      if (result.attrLeveledUp) {
-        setTimeout(() => {
-          this.misc.showToast(`${result.attrName} rose to Lvl ${result.attrLevel}!`, 'success');
-        }, 600);
-      }
-      
-      this.render();
-    }, 400);
+    if (result.playerLeveledUp) {
+      setTimeout(() => this.misc.triggerLevelUp(result.newLevel), 300);
+    } else {
+      this.showUndoToast(habitId, `Gained +${xpReward} GP in ${result.attrName}!`);
+    }
+
+    if (result.attrLeveledUp) {
+      setTimeout(() => {
+        this.misc.showToast(`${result.attrName} rose to Lvl ${result.attrLevel}!`, 'success');
+      }, 600);
+    }
   }
 
   handleQuestCompletion(event, habitId) {
@@ -369,8 +373,8 @@ class DashboardEngine {
     const result = this.store.missHabit(habitId);
     if (!result) return;
 
-    this.showUndoToast(habitId, `Quest marked as missed.`);
     this.render();
+    this.showUndoToast(habitId, `Quest marked as missed.`);
   }
 
   render() {
