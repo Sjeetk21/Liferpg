@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Review — LifeRPG</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/weekly_review.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) injected dynamically by layout.js -->
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="section-header">
+                <div>
+                    <h2 class="section-title">Weekly Review</h2>
+                    <p class="section-subtitle">Reflect on your growth trajectory, habits completed, and areas of focus.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-finalize-review">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 4px; display: inline-block; vertical-align: middle;"><polyline points="20 6 9 17 4 12"/></svg>
+                    Archive This Week
+                </button>
+            </header>
+
+            <!-- Active Week summary panel -->
+            <div class="card active-week-card">
+                <div class="week-header-row">
+                    <h3 class="week-range-title" id="week-date-range">June 17 - June 23, 2026</h3>
+                    <span class="active-tag">Active Week</span>
+                </div>
+                
+                <div class="review-stats-grid">
+                    <div class="review-stat-box">
+                        <div class="val" id="review-xp-gained">0</div>
+                        <div class="lbl">GP Gained</div>
+                    </div>
+                    <div class="review-stat-box">
+                        <div class="val" id="review-completions">0</div>
+                        <div class="lbl">Habits Completed</div>
+                    </div>
+                    <div class="review-stat-box">
+                        <div class="val" id="review-best-streak" style="color: var(--color-warning);">0 Days</div>
+                        <div class="lbl">Best Streak</div>
+                    </div>
+                </div>
+
+                <div class="review-attributes-comparison">
+                    <div class="attribute-highlight-card improved">
+                        <div class="lbl-row">
+                            <span class="icon">🚀</span>
+                            <span class="lbl">Most Improved Focus Area</span>
+                        </div>
+                        <h4 class="attr-val" id="review-most-improved">Knowledge</h4>
+                    </div>
+                    <div class="attribute-highlight-card low-performing">
+                        <div class="lbl-row">
+                            <span class="icon">⚠️</span>
+                            <span class="lbl">Lowest Performing Focus Area</span>
+                        </div>
+                        <h4 class="attr-val" id="review-lowest-performing">Fitness</h4>
+                    </div>
+                </div>
+
+                <div class="attribute-xp-bars-section">
+                    <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem;">GP Breakdown (Last 7 Days)</h4>
+                    <div id="review-xp-bars-container" class="xp-bars-container">
+                        <!-- Dynamic bars injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Archives section -->
+            <section style="margin-top: 3rem;">
+                <h3 style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem;">Archived Reviews</h3>
+                <div class="archives-list" id="archives-container">
+                    <!-- Cards of past weeks here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Archive Weekly Review Modal Overlay -->
+    <div class="modal-overlay" id="archive-modal-overlay">
+        <div class="modal-card" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Archive Weekly Review</h3>
+                <button class="modal-close-btn" id="btn-close-archive-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="review-biggest-win">Biggest Win of the Week</label>
+                    <input class="form-input" type="text" id="review-biggest-win" placeholder="e.g. Completed morning workouts 5 times" required>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label" for="review-biggest-miss">Biggest Miss / Obstacle</label>
+                    <input class="form-input" type="text" id="review-biggest-miss" placeholder="e.g. Slacked off on learning coding on Wednesday" required>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label" for="review-focus-next">Primary Focus for Next Week</label>
+                    <input class="form-input" type="text" id="review-focus-next" placeholder="e.g. Prioritize consistent sleep schedule" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-archive">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-archive">Confirm & Archive</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="../js/store.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/weekly_review.js"></script>
+</body>
+</html>

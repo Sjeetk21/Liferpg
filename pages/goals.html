@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missions & Goals — LifeRPG</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/goals.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) injected dynamically by layout.js -->
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="section-header">
+                <div>
+                    <h2 class="section-title">Missions & Goals</h2>
+                    <p class="section-subtitle">Set major milestones for your life and track your journey.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-create-goal">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Mission
+                </button>
+            </header>
+
+            <!-- Goals Grid -->
+            <div class="goals-grid" id="goals-container">
+                <!-- Goal cards injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Goal Create/Edit Modal -->
+    <div class="modal-overlay" id="goal-modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-goal-title">Add Mission</h3>
+                <button class="modal-close-btn" id="btn-close-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-goal-id">
+
+                <div class="form-group">
+                    <label class="form-label" for="goal-name">Mission Name</label>
+                    <input class="form-input" type="text" id="goal-name" placeholder="e.g. Learn Spanish conversational level" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="goal-deadline">Deadline</label>
+                    <input class="form-input" type="date" id="goal-deadline" required>
+                </div>
+
+                <!-- Milestones Section inside modal -->
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <label class="form-label">Milestones</label>
+                        <button class="btn btn-secondary" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;" id="btn-add-milestone-field">Add Milestone</button>
+                    </div>
+                    <div id="milestones-form-fields-container">
+                        <!-- Dynamic input rows here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-goal">Save Mission</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="../js/store.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/goals.js"></script>
+</body>
+</html>

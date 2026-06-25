@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics & Insights — LifeRPG</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/progress.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) injected dynamically by layout.js -->
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 class="section-title">Analytics & Insights</h2>
+                    <p class="section-subtitle">Observe your growth trajectory and consistency metrics.</p>
+                </div>
+                <!-- Time Range Filter Tabs -->
+                <div style="display: flex; gap: 0.5rem;" class="filter-tabs">
+                    <button class="btn btn-secondary filter-tab-btn active" data-range="7" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">7D</button>
+                    <button class="btn btn-secondary filter-tab-btn" data-range="30" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">30D</button>
+                    <button class="btn btn-secondary filter-tab-btn" data-range="90" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">90D</button>
+                    <button class="btn btn-secondary filter-tab-btn" data-range="365" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">1Y</button>
+                </div>
+            </header>
+
+            <!-- Stats Ribbon -->
+            <div class="progress-stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total-xp">0</span>
+                    <span class="stat-label">Total GP Earned</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-current-streak" style="color: var(--color-warning);">0 Days</span>
+                    <span class="stat-label">Current Streak</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-longest-streak" style="color: var(--color-accent);">0 Days</span>
+                    <span class="stat-label">Longest Streak</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-consistency" style="color: var(--color-secondary);">0%</span>
+                    <span class="stat-label" style="display: flex; align-items: center; justify-content: center; gap: 4px;">
+                        Consistency Score
+                        <span id="btn-consistency-info" style="cursor: pointer; opacity: 0.7; font-size: 0.85rem;" title="Click for details">ℹ️</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                
+                <!-- 1. Contribution Heatmap -->
+                <div class="card chart-card heatmap-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Yearly Development Map</h3>
+                        <span style="font-size: 0.75rem; color: var(--text-secondary);" id="heatmap-total-label">0 activities logged this year</span>
+                    </div>
+                    <div class="heatmap-scroll-container">
+                        <svg class="heatmap-svg" id="heatmap-svg-root"></svg>
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Less</span>
+                        <div class="legend-box" style="background-color: rgba(255,255,255,0.03);"></div>
+                        <div class="legend-box" style="background-color: rgba(99, 102, 241, 0.25);"></div>
+                        <div class="legend-box" style="background-color: rgba(99, 102, 241, 0.5);"></div>
+                        <div class="legend-box" style="background-color: rgba(99, 102, 241, 0.75);"></div>
+                        <div class="legend-box" style="background-color: rgba(99, 102, 241, 1);"></div>
+                        <span>More</span>
+                    </div>
+                </div>
+
+                <!-- 2. GP Growth Line Chart -->
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title" id="growth-chart-title">GP Gains (Last 7 Days)</h3>
+                    </div>
+                    <div class="chart-container" id="xp-chart-container">
+                        <!-- SVG line chart injected here -->
+                    </div>
+                </div>
+
+                <!-- 3. Quests Completed Stacked Bar Chart -->
+                <div class="card chart-card">
+                    <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="chart-title" id="quests-chart-title">Quests Completed (Last 7 Days)</h3>
+                        <div style="display: flex; gap: 8px; font-size: 0.65rem; color: var(--text-secondary); text-transform: uppercase;">
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: var(--color-primary); border-radius: 2px; display: inline-block;"></span>Habits</span>
+                            <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; background: var(--color-accent); border-radius: 2px; display: inline-block;"></span>Tasks</span>
+                        </div>
+                    </div>
+                    <div class="chart-container" id="quests-chart-container">
+                        <!-- SVG stacked bar chart injected here -->
+                    </div>
+                </div>
+
+                <!-- 4. Attribute Diagnostics -->
+                <div class="card chart-card" id="diagnostics-card">
+                    <div class="chart-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="chart-title">Attribute Analysis</h3>
+                        <button class="btn btn-secondary" id="btn-toggle-diagnostics" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; display: none;">View All</button>
+                    </div>
+                    <div id="diagnostics-container" style="display: flex; flex-direction: column; gap: 12px; margin-top: 1rem;">
+                        <!-- Dynamic diagnostic list injected here -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Consistency Score Info Modal Overlay -->
+    <div class="modal-overlay" id="consistency-info-modal" style="z-index: 9999;">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Consistency Score Formula</h3>
+                <button class="modal-close-btn" id="btn-close-consistency-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body" style="font-size: 0.85rem; line-height: 1.5;">
+                <p>Your <strong>Consistency Score</strong> is calculated based on daily checklist executions over the selected time range:</p>
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; font-family: monospace; font-size: 0.95rem; margin: 12px 0; text-align: center; color: var(--color-secondary); font-weight: 700;">
+                    Score = [Completed / (Completed + Missed)] * 100%
+                </div>
+                <p>Daily/Weekly habits that are completed add to <strong>Completed</strong>. Habits that you fail to mark or mark as missed (❌) add to <strong>Missed</strong>. Maintain focus to keep this score near 100%!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="document.getElementById('consistency-info-modal').classList.remove('active')">Got It</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip element -->
+    <div class="chart-tooltip" id="chart-tooltip-element"></div>
+
+    <!-- JS Scripts -->
+    <script src="../js/store.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/progress.js"></script>
+</body>
+</html>

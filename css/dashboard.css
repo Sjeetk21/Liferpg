@@ -1,0 +1,562 @@
+/* Dashboard Specific Styles */
+
+.grid-dashboard {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+    .grid-dashboard {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Player Profile Card */
+.profile-card {
+    background: linear-gradient(135deg, rgba(20, 27, 45, 0.95), rgba(11, 15, 25, 0.95));
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.player-info-container {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.player-badge-lvl {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-indigo);
+    position: relative;
+    flex-shrink: 0;
+}
+
+.player-badge-lvl .lvl-num {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+}
+
+.player-badge-lvl .lvl-lbl {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.8);
+}
+
+.player-meta h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.mission-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.mission-badge span {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.momentum-badge {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+}
+
+.momentum-icon {
+    font-size: 1.5rem;
+    animation: flame-flicker 1.5s infinite alternate;
+}
+
+@keyframes flame-flicker {
+    0% { transform: scale(1) rotate(-5deg); filter: drop-shadow(0 0 2px rgba(245, 158, 11, 0.5)); }
+    100% { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.8)); }
+}
+
+.momentum-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.momentum-val {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.momentum-lbl {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* XP Progress Module */
+.xp-progress-module {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.xp-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.xp-val {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progress-bar-outer {
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+.progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    width: 0%;
+    border-radius: 6px;
+    transition: width 0.8s cubic-bezier(0.1, 0.8, 0.2, 1);
+    position: relative;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+.progress-bar-inner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Today's Completion Dial Card */
+.completion-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+}
+
+.dial-svg-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.dial-svg {
+    transform: rotate(-90deg);
+}
+
+.dial-circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.03);
+    stroke-width: 10;
+}
+
+.dial-circle-fill {
+    fill: none;
+    stroke: url(#dial-gradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 314; /* 2 * PI * r (r=50) */
+    stroke-dashoffset: 314;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dial-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* Character Attributes */
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.attribute-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    transition: var(--transition-bounce);
+}
+
+.attribute-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.attribute-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attribute-title-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.attribute-icon-wrapper {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.attribute-info-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.attribute-level-badge {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-display);
+}
+
+.attribute-progress-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* Quests/Action List */
+.quests-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.quests-header h3 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.quest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.quest-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition-bounce);
+    gap: 1rem;
+}
+
+.quest-item:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateX(4px);
+}
+
+.quest-details {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.quest-checkbox-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-bounce);
+    color: white;
+    flex-shrink: 0;
+}
+
+.quest-checkbox-btn:hover {
+    border-color: var(--color-primary);
+    background-color: rgba(99, 102, 241, 0.1);
+    transform: scale(1.1);
+}
+
+.quest-checkbox-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-width: 3;
+    fill: none;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--transition-bounce);
+}
+
+.quest-item.completed .quest-checkbox-btn {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.quest-item.completed .quest-checkbox-btn svg {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.quest-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.quest-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    transition: var(--transition-smooth);
+}
+
+.quest-item.completed .quest-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.quest-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.quest-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.25px;
+}
+
+.badge-easy { background-color: rgba(16, 185, 129, 0.1); color: var(--color-secondary); }
+.badge-medium { background-color: rgba(245, 158, 11, 0.1); color: var(--color-warning); }
+.badge-hard { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; }
+
+.quest-rewards {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.quest-reward-pill {
+    background-color: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary);
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* V1.1 UI Refinements */
+.quest-section-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.quest-section-title.overdue-title {
+    color: #EF4444;
+}
+
+.quest-item.overdue-item {
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    background: rgba(239, 68, 68, 0.02);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.05);
+}
+
+.quest-item.overdue-item:hover {
+    border-color: rgba(239, 68, 68, 0.8);
+    background: rgba(239, 68, 68, 0.04);
+}
+
+.overdue-badge {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.habit-action-btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action-check, .btn-action-miss {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    background-color: rgba(255,255,255,0.02);
+    transition: var(--transition-bounce);
+}
+
+.btn-action-check:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    transform: scale(1.1);
+}
+
+.btn-action-miss:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: #EF4444;
+    color: #EF4444;
+    transform: scale(1.1);
+}
+
+.quest-item.completed {
+    border-left: 3px solid var(--color-secondary);
+}
+
+.quest-item.missed {
+    border-left: 3px solid #EF4444;
+    opacity: 0.6;
+}
+
+.quest-item.missed .quest-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* Mood buttons styling */
+.mood-btn {
+    transition: var(--transition-smooth);
+    border: 1px solid var(--border-color);
+}
+.mood-btn.active {
+    border-color: var(--color-primary) !important;
+    background-color: rgba(99, 102, 241, 0.15) !important;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+    transform: translateY(-2px);
+}
+

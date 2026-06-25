@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outcome Tracking — LifeRPG</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/outcomes.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) injected dynamically by layout.js -->
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="section-header">
+                <div>
+                    <h2 class="section-title">Outcome Tracking</h2>
+                    <p class="section-subtitle">Track measurable real-life outcomes over time with progression trends.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-create-outcome">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 4px; display: inline-block; vertical-align: middle;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New Metric
+                </button>
+            </header>
+
+            <!-- Grid container for outcome cards -->
+            <div class="outcomes-grid" id="outcomes-container">
+                <!-- Injected dynamically -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Outcome Metric Modal -->
+    <div class="modal-overlay" id="outcome-modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Define Trackable Metric</h3>
+                <button class="modal-close-btn" id="btn-close-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="outcome-name">Metric Name</label>
+                    <input class="form-input" type="text" id="outcome-name" placeholder="e.g. Body Weight, Study Hours, Savings" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="outcome-unit">Measurement Unit</label>
+                    <input class="form-input" type="text" id="outcome-unit" placeholder="e.g. kg, hours, books, km, $" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="outcome-target">Target Value (Optional)</label>
+                    <input class="form-input" type="number" step="any" id="outcome-target" placeholder="e.g. 75, 40, 10">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-outcome">Create Metric</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Value Modal -->
+    <div class="modal-overlay" id="log-modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Log Metric Entry</h3>
+                <button class="modal-close-btn" id="btn-close-log-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="log-outcome-id">
+                <div class="form-group">
+                    <label class="form-label" for="log-value">Recorded Value (<span id="log-unit-label">unit</span>)</label>
+                    <input class="form-input" type="number" step="any" id="log-value" placeholder="Enter value" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="log-date">Log Date</label>
+                    <input class="form-input" type="date" id="log-date" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-log-modal">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-log">Save Log Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="../js/store.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/outcomes.js"></script>
+</body>
+</html>

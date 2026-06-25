@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quests & Habits — LifeRPG</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/habits.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) injected dynamically by layout.js -->
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header class="section-header">
+                <div>
+                    <h2 class="section-title">Quests & Habits</h2>
+                    <p class="section-subtitle">Define actions that shape your character attributes.</p>
+                </div>
+                <button class="btn btn-primary" id="btn-create-habit">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Create Quest
+                </button>
+            </header>
+
+            <!-- Search & Filters Row -->
+            <div class="habits-actions-row" style="margin-bottom: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; width: 100%;">
+                <div class="search-box" style="flex-grow: 1; max-width: 400px; position: relative;">
+                    <input type="text" id="search-input" placeholder="Search quests by name, attribute, or frequency..." style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.75rem 1rem; color: var(--text-primary); font-size: 0.9rem; width: 100%; outline: none; transition: var(--transition-smooth);">
+                </div>
+                <div class="filter-group" style="display: flex; gap: 0.75rem;">
+                    <select id="filter-category" class="form-select" style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: var(--radius-md); width: auto;">
+                        <option value="all">All Attributes</option>
+                        <option value="Fitness">Fitness</option>
+                        <option value="Knowledge">Knowledge</option>
+                        <option value="Wealth">Wealth</option>
+                        <option value="Creativity">Creativity</option>
+                    </select>
+                    <select id="filter-frequency" class="form-select" style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: var(--radius-md); width: auto;">
+                        <option value="all">All Frequencies</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="One-time">One-time</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Habits Grid -->
+            <div class="habits-grid" id="habits-container">
+                <!-- Habit items will be dynamically injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Habit Create/Edit Modal Overlay -->
+    <div class="modal-overlay" id="habit-modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-habit-title">Create Action</h3>
+                <button class="modal-close-btn" id="btn-close-modal">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-habit-id">
+                
+                <div class="form-group">
+                    <label class="form-label" for="habit-name">Quest Name</label>
+                    <input class="form-input" type="text" id="habit-name" placeholder="e.g. Meditate for 15 mins" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="habit-category">Linked Attribute (Category)</label>
+                        <select class="form-select" id="habit-category">
+                            <option value="Fitness">Fitness (⚡)</option>
+                            <option value="Knowledge">Knowledge (📚)</option>
+                            <option value="Wealth">Wealth (💰)</option>
+                            <option value="Creativity">Creativity (🎨)</option>
+                            <option value="new-focus">+ Create New Focus Area...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="habit-outcome">Link to Outcome Metric</label>
+                        <select class="form-select" id="habit-outcome">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="habit-difficulty">Difficulty</label>
+                        <select class="form-select" id="habit-difficulty">
+                            <option value="Easy">Easy (50 GP)</option>
+                            <option value="Medium">Medium (100 GP)</option>
+                            <option value="Hard">Hard (200 GP)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="habit-frequency">Frequency</label>
+                        <select class="form-select" id="habit-frequency">
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="One-time">One-time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group" id="streak-mode-group">
+                        <label class="form-label" for="habit-streak-mode">Streak Mode</label>
+                        <select class="form-select" id="habit-streak-mode">
+                            <option value="strict">Strict (Reset on 1 miss)</option>
+                            <option value="flexible">Flexible (Stay active if 5/7 days completed)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="habit-deadline-group" style="display: none;">
+                        <label class="form-label" for="habit-deadline">Deadline Date</label>
+                        <input class="form-input" type="date" id="habit-deadline">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-habit">Save Action</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="../js/store.js"></script>
+    <script src="../js/layout.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/habits.js"></script>
+</body>
+</html>
